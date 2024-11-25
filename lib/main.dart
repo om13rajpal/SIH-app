@@ -1,4 +1,4 @@
-import 'package:drdo/homepage.dart';
+import 'package:drdo/login.dart';
 import 'package:flutter/material.dart';
 
 void main(){
@@ -11,11 +11,12 @@ class Drdo extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.black,
         visualDensity: VisualDensity.adaptivePlatformDensity
       ),
-      home: const Homepage(),
+      home: const Login(),
     );
   }
 
