@@ -1,14 +1,14 @@
 import 'package:drdo/components/background.dart';
 import 'package:drdo/components/button.dart';
+import 'package:drdo/components/input.dart';
 import 'package:drdo/components/loginsignup.dart';
 import 'package:drdo/components/text.dart';
-import 'package:drdo/components/input.dart';
 import 'package:drdo/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-class Login extends StatelessWidget {
-  const Login({super.key});
+class Register extends StatelessWidget {
+  const Register({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -87,17 +87,21 @@ class Login extends StatelessWidget {
                           onPressed: () {
                             print(emailController.text);
                             print(passwordController.text);
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const Homepage(),));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Homepage(),
+                                ));
                           },
-                          text: "Login",
+                          text: "Register",
                           width: 100,
                         ),
                         const SizedBox(
                           height: 3,
                         ),
                         const LoginSignup(
-                          text: "Sign up",
-                          question: 'New to this app?',
+                          text: "Login",
+                          question: 'Already registered in the app?',
                         )
                       ],
                     ),
