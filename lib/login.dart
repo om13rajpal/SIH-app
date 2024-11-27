@@ -5,6 +5,7 @@ import 'package:drdo/components/text.dart';
 import 'package:drdo/components/input.dart';
 import 'package:drdo/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 
 class Login extends StatelessWidget {
@@ -62,7 +63,7 @@ class Login extends StatelessWidget {
                           labelText: "Email",
                           icon: const Icon(
                             Icons.email,
-                            size: 20,
+                            size: 17,
                           ),
                         ),
                         SizedBox(
@@ -75,7 +76,7 @@ class Login extends StatelessWidget {
                           labelText: "Password",
                           icon: const Icon(
                             Icons.lock,
-                            size: 20,
+                            size: 17,
                           ),
                         ),
                       ],
@@ -85,15 +86,26 @@ class Login extends StatelessWidget {
                       children: [
                         Button(
                           onPressed: () {
-                            print(emailController.text);
-                            print(passwordController.text);
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const Homepage(),));
+                            (emailController.text.isEmpty ||
+                                    passwordController.text.isEmpty)
+                                ? Fluttertoast.showToast(
+                                    msg: "All the fields are required",
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1)
+                                : Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const Homepage(),
+                                    ));
                           },
                           text: "Login",
                           width: 100,
                         ),
                         const SizedBox(
-                          height: 3,
+                          height: 5,
                         ),
                         const LoginSignup(
                           text: "Sign up",

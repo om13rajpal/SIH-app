@@ -5,6 +5,7 @@ import 'package:drdo/components/loginsignup.dart';
 import 'package:drdo/components/text.dart';
 import 'package:drdo/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
 
 class Register extends StatelessWidget {
@@ -62,7 +63,7 @@ class Register extends StatelessWidget {
                           labelText: "Email",
                           icon: const Icon(
                             Icons.email,
-                            size: 20,
+                            size: 17,
                           ),
                         ),
                         SizedBox(
@@ -75,7 +76,7 @@ class Register extends StatelessWidget {
                           labelText: "Password",
                           icon: const Icon(
                             Icons.lock,
-                            size: 20,
+                            size: 17,
                           ),
                         ),
                       ],
@@ -85,19 +86,26 @@ class Register extends StatelessWidget {
                       children: [
                         Button(
                           onPressed: () {
-                            print(emailController.text);
-                            print(passwordController.text);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const Homepage(),
-                                ));
+                            (emailController.text.isEmpty ||
+                                    passwordController.text.isEmpty)
+                                ? Fluttertoast.showToast(
+                                    msg: "All the fields are required",
+                                    backgroundColor: Colors.black,
+                                    textColor: Colors.white,
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    timeInSecForIosWeb: 1)
+                                : Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const Homepage(),
+                                    ));
                           },
                           text: "Register",
                           width: 100,
                         ),
                         const SizedBox(
-                          height: 3,
+                          height: 5,
                         ),
                         const LoginSignup(
                           text: "Login",

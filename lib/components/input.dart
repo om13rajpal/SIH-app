@@ -47,9 +47,9 @@ class Input extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
                 borderSide: const BorderSide(color: Colors.black),
               ),
-              hintStyle: TextStyle(
-                  color: const Color.fromARGB(255, 145, 145, 145),
-                  fontSize: MediaQuery.of(context).size.width * 0.040,
+              hintStyle: const TextStyle(
+                  color: Color.fromARGB(255, 145, 145, 145),
+                  fontSize: 14,
                   fontWeight: FontWeight.w500)),
         ),
       ],

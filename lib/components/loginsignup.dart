@@ -14,7 +14,7 @@ class LoginSignup extends StatelessWidget {
       children: [
         TextData(
             text: question,
-            fontSize: 13,
+            fontSize: 12,
             fontWeight: FontWeight.w600,
             color: Colors.black38),
         const SizedBox(
@@ -23,8 +23,8 @@ class LoginSignup extends StatelessWidget {
         InkWell(
             onTap: () {
               (text == "Login")
-                  ? Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => const Login()))
+                  ? Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const Login()))
                   : Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -33,7 +33,7 @@ class LoginSignup extends StatelessWidget {
             },
             child: TextData(
                 text: text,
-                fontSize: 14,
+                fontSize: 13,
                 fontWeight: FontWeight.w600,
                 color: Colors.black))
       ],
