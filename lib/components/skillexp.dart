@@ -17,7 +17,7 @@ class Experience extends StatelessWidget{
                           text: skill,
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xff3e3e3e)),
+                          color: const Color(0xff3e3e3e)),
                       SizedBox(
                         height: 4.5,
                         child: LinearPercentIndicator(
