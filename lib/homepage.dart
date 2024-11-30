@@ -1,8 +1,11 @@
 import 'package:drdo/components/background.dart';
+import 'package:drdo/components/job.dart';
+import 'package:drdo/components/profiledetails.dart';
+import 'package:drdo/components/sectionheading.dart';
+import 'package:drdo/components/skillexp.dart';
 import 'package:drdo/components/text.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -32,7 +35,7 @@ class Homepage extends StatelessWidget {
                       height: 80,
                       decoration: BoxDecoration(
                         color: const Color(0xff6F6F6F),
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.25),
@@ -66,48 +69,33 @@ class Homepage extends StatelessWidget {
                       const SizedBox(
                         width: 5,
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: Colors.black, width: 1),
-                        ),
-                        child: const Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                          child: TextData(
-                              text: 'Verified',
-                              fontSize: 8,
-                              fontWeight: FontWeight.w500,
-                              color: Color(0xff767676)),
+                      Transform.translate(
+                        offset: const Offset(0, 3.5),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: Colors.black, width: 1),
+                          ),
+                          child: const Padding(
+                            padding:
+                                EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            child: TextData(
+                                text: 'Verified',
+                                fontSize: 8,
+                                fontWeight: FontWeight.w500,
+                                color: Color(0xff767676)),
+                          ),
                         ),
                       )
                     ],
                   ),
                   const Row(
                     children: [
-                      TextData(
-                          text: "Unit: ",
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xff9d9b9b)),
-                      TextData(
-                          text: "1st Reconnaissance Squadron",
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff3c3c3c)),
+                      ProfileDetails(data: "Unit", value: "1st Reconnaissance Squadron"),
                       SizedBox(
                         width: 10,
                       ),
-                      TextData(
-                          text: "Age: ",
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xff9d9b9b)),
-                      TextData(
-                          text: "19",
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff3c3c3c)),
+                      ProfileDetails(data: "Age", value: "19")
                     ],
                   ),
                   const SizedBox(
@@ -115,29 +103,11 @@ class Homepage extends StatelessWidget {
                   ),
                   const Row(
                     children: [
-                      TextData(
-                          text: "Pronouns: ",
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xff9d9b9b)),
-                      TextData(
-                          text: "He / Him",
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff3c3c3c)),
+                      ProfileDetails(data: "Pronouns", value: "He / Him"),
                       SizedBox(
                         width: 10,
                       ),
-                      TextData(
-                          text: "Experience: ",
-                          fontSize: 10,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xff9d9b9b)),
-                      TextData(
-                          text: "Beginner",
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff3c3c3c)),
+                     ProfileDetails(data: "Experience", value: "Beginner")
                     ],
                   ),
                   const SizedBox(
@@ -166,11 +136,7 @@ class Homepage extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  const TextData(
-                      text: "Top Skills",
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xff2c2c34)),
+                  const Sectionheading(text: "Top Skills"),
                   const Row(
                     children: [
                       TextData(
@@ -198,316 +164,39 @@ class Homepage extends StatelessWidget {
                   const SizedBox(
                     height: 15,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const TextData(
-                          text: "Docker",
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff3e3e3e)),
-                      SizedBox(
-                        height: 4.5,
-                        child: LinearPercentIndicator(
-                          width: 185,
-                          lineHeight: 17,
-                          padding: const EdgeInsets.only(left: 5),
-                          animation: true,
-                          animationDuration: 1000,
-                          progressColor: const Color(0xff3C3C3C),
-                          percent: 0.71,
-                          barRadius: const Radius.circular(10),
-                          backgroundColor: const Color(0xFFA8A8A8),
-                        ),
-                      )
-                    ],
-                  ),
+                  const Experience(skill: "Docker", percentage: 0.42),
                   const SizedBox(
                     height: 6,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const TextData(
-                          text: "Node.js",
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff3e3e3e)),
-                      SizedBox(
-                        height: 4.5,
-                        child: LinearPercentIndicator(
-                          width: 185,
-                          lineHeight: 17,
-                          padding: const EdgeInsets.only(left: 5),
-                          animation: true,
-                          animationDuration: 1000,
-                          progressColor: const Color(0xff3C3C3C),
-                          percent: 0.4,
-                          barRadius: const Radius.circular(10),
-                          backgroundColor: const Color(0xFFA8A8A8),
-                        ),
-                      )
-                    ],
-                  ),
+                  const Experience(skill: "Node.js", percentage: 0.17),
                   const SizedBox(
                     height: 6,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const TextData(
-                          text: "TypeScript",
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff3e3e3e)),
-                      SizedBox(
-                        height: 4.5,
-                        child: LinearPercentIndicator(
-                          width: 185,
-                          lineHeight: 17,
-                          padding: const EdgeInsets.only(left: 5),
-                          animation: true,
-                          animationDuration: 1000,
-                          progressColor: const Color(0xff3C3C3C),
-                          percent: 0.8,
-                          barRadius: const Radius.circular(10),
-                          backgroundColor: const Color(0xFFA8A8A8),
-                        ),
-                      )
-                    ],
-                  ),
+                  const Experience(skill: "Flutter", percentage: 0.65),
                   const SizedBox(
                     height: 6,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const TextData(
-                          text: "Next.js",
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff3e3e3e)),
-                      SizedBox(
-                        height: 4.5,
-                        child: LinearPercentIndicator(
-                          width: 185,
-                          lineHeight: 17,
-                          padding: const EdgeInsets.only(left: 5),
-                          animation: true,
-                          animationDuration: 1000,
-                          progressColor: const Color(0xff3C3C3C),
-                          percent: 0.15,
-                          barRadius: const Radius.circular(10),
-                          backgroundColor: const Color(0xFFA8A8A8),
-                        ),
-                      )
-                    ],
-                  ),
+                  const Experience(skill: "Next.js", percentage: 0.78),
                   const SizedBox(
                     height: 6,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const TextData(
-                          text: "Flutter",
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xff3e3e3e)),
-                      SizedBox(
-                        height: 4.5,
-                        child: LinearPercentIndicator(
-                          width: 185,
-                          lineHeight: 17,
-                          padding: const EdgeInsets.only(left: 5),
-                          animation: true,
-                          animationDuration: 1000,
-                          progressColor: const Color(0xff3C3C3C),
-                          percent: 1,
-                          barRadius: const Radius.circular(10),
-                          backgroundColor: const Color(0xFFA8A8A8),
-                        ),
-                      )
-                    ],
-                  ),
+                  const Experience(skill: "Mongo", percentage: 1),
                   const SizedBox(
                     height: 25,
                   ),
-                  const TextData(
-                      text: "Scheduled Interviews",
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xff2c2c34)),
+                  const Sectionheading(text: "Scheduled Interviews"),
                   const SizedBox(
                     height: 8,
                   ),
-                  Container(
-                    width: screenWidth * 0.81,
-                    height: 65,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff8EB7A8),
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 6),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 53,
-                            height: 53,
-                            decoration: BoxDecoration(
-                              color: const Color(0xffE8E8E8),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 6),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextData(
-                                    text: "Node.js Developer",
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xff202020)),
-                                TextData(
-                                    text: "Applications: 101",
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xff2b2b2b)),
-                                TextData(
-                                    text: "Opened 2 Days Ago",
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff3d3d3d))
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  const Job(jobTitle: "Node.js Developer"),
                   const SizedBox(
                     height: 5,
                   ),
-                  Container(
-                    width: screenWidth * 0.81,
-                    height: 65,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff8EB7A8),
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 6),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 53,
-                            height: 53,
-                            decoration: BoxDecoration(
-                              color: const Color(0xffE8E8E8),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 6),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextData(
-                                    text: "Node.js Developer",
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xff202020)),
-                                TextData(
-                                    text: "Applications: 101",
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xff2b2b2b)),
-                                TextData(
-                                    text: "Opened 2 Days Ago",
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff3d3d3d))
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  const Job(jobTitle: "Node.js Developer"),
                   const SizedBox(
                     height: 5,
                   ),
-                  Container(
-                    width: screenWidth * 0.81,
-                    height: 65,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff8EB7A8),
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 6),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 53,
-                            height: 53,
-                            decoration: BoxDecoration(
-                              color: const Color(0xffE8E8E8),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 6),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                TextData(
-                                    text: "Node.js Developer",
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: Color(0xff202020)),
-                                TextData(
-                                    text: "Applications: 101",
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color(0xff2b2b2b)),
-                                TextData(
-                                    text: "Opened 2 Days Ago",
-                                    fontSize: 9,
-                                    fontWeight: FontWeight.w400,
-                                    color: Color(0xff3d3d3d))
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  const Job(jobTitle: "Node.js Developer"),
                   const SizedBox(
                     height: 5,
                   ),
@@ -536,11 +225,7 @@ class Homepage extends StatelessWidget {
                   const SizedBox(
                     height: 25,
                   ),
-                  const TextData(
-                      text: "Profile Score",
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xff2c2c34)),
+                  const Sectionheading(text: "Profile Score"),
                   const SizedBox(
                     height: 8,
                   ),
