@@ -4,6 +4,7 @@ import 'package:drdo/components/mainheading.dart';
 import 'package:drdo/components/numbers.dart';
 import 'package:drdo/components/searchbar.dart';
 import 'package:drdo/components/sectionheading.dart';
+import 'package:drdo/components/sortnsearch.dart';
 import 'package:drdo/components/text.dart';
 import 'package:flutter/material.dart';
 
@@ -138,13 +139,9 @@ class JobList extends StatelessWidget {
                     child: Search(controller: controller)
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 8,
                   ),
-                  const Row(
-                    children: [
-                      // drop down here
-                    ],
-                  ),
+                  const Sort(),
                   const SizedBox(
                     height: 10,
                   ),

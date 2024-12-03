@@ -3,11 +3,19 @@ import 'package:drdo/components/mainheading.dart';
 import 'package:drdo/components/numbers.dart';
 import 'package:drdo/components/searchbar.dart';
 import 'package:drdo/components/sectionheading.dart';
+import 'package:drdo/components/sortnsearch.dart';
+import 'package:drdo/components/userdetail.dart';
 import 'package:flutter/material.dart';
 
-class UserList extends StatelessWidget {
+class UserList extends StatefulWidget {
   const UserList({super.key});
 
+  @override
+  State<UserList> createState() => _UserListState();
+}
+
+class _UserListState extends State<UserList> {
+  String? selectedValue;
   @override
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
@@ -42,13 +50,9 @@ class UserList extends StatelessWidget {
               ),
               SizedBox(height: 32, child: Search(controller: controller)),
               const SizedBox(
-                height: 5,
+                height: 8,
               ),
-              const Row(
-                children: [
-                  // drop down here
-                ],
-              ),
+              const Sort(),
               const SizedBox(
                 height: 20,
               ),
@@ -64,7 +68,51 @@ class UserList extends StatelessWidget {
               const SizedBox(
                 height: 8,
               ),
-              // list of users here
+              const UserDetail(
+                  name: "Om Rajpal",
+                  age: "19",
+                  work: "Flutter Developer",
+                  percent: 0.76),
+              const SizedBox(
+                height: 6,
+              ),
+              const UserDetail(
+                  name: "Om Rajpal",
+                  age: "19",
+                  work: "Flutter Developer",
+                  percent: 0.76),
+              const SizedBox(
+                height: 6,
+              ),
+              const UserDetail(
+                  name: "Om Rajpal",
+                  age: "19",
+                  work: "Flutter Developer",
+                  percent: 0.76),
+              const SizedBox(
+                height: 6,
+              ),
+              const UserDetail(
+                  name: "Om Rajpal",
+                  age: "19",
+                  work: "Flutter Developer",
+                  percent: 0.76),
+              const SizedBox(
+                height: 6,
+              ),
+              const UserDetail(
+                  name: "Om Rajpal",
+                  age: "19",
+                  work: "Flutter Developer",
+                  percent: 0.76),
+              const SizedBox(
+                height: 6,
+              ),
+              const UserDetail(
+                  name: "Om Rajpal",
+                  age: "19",
+                  work: "Flutter Developer",
+                  percent: 0.76),
             ],
           ),
         ),
