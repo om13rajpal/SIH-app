@@ -3,13 +3,31 @@ import 'package:drdo/components/button.dart';
 import 'package:drdo/components/loginsignup.dart';
 import 'package:drdo/components/text.dart';
 import 'package:drdo/components/input.dart';
+import 'package:drdo/functions/loginsignup.dart';
 import 'package:drdo/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
   const Login({super.key});
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  late SharedPreferences sharedPreferences;
+  @override
+  void initState() {
+    initializeSharedPref();
+    super.initState();
+  }
+
+  void initializeSharedPref() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,21 +103,34 @@ class Login extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Button(
-                          onPressed: () {
-                            (emailController.text.isEmpty ||
-                                    passwordController.text.isEmpty)
-                                ? Fluttertoast.showToast(
-                                    msg: "All the fields are required",
-                                    backgroundColor: Colors.black,
-                                    textColor: Colors.white,
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIosWeb: 1)
-                                : Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const Homepage(),
-                                    ));
+                          onPressed: () async {
+                            String token = await authenticate(emailController,
+                                    passwordController, "login");
+                            if (token == "error") {
+                              Fluttertoast.showToast(
+                                  msg: "Invalid Credentials",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.black,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            } else if (token == "empty") {
+                              Fluttertoast.showToast(
+                                  msg: "Empty Fields",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.black,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            } else {
+                              sharedPreferences.setString("token", token.toString());
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Homepage()));
+                            }
                           },
                           text: "Login",
                           width: 100,

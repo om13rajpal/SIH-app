@@ -3,13 +3,31 @@ import 'package:drdo/components/button.dart';
 import 'package:drdo/components/input.dart';
 import 'package:drdo/components/loginsignup.dart';
 import 'package:drdo/components/text.dart';
+import 'package:drdo/functions/loginsignup.dart';
 import 'package:drdo/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
   const Register({super.key});
+
+  @override
+  State<Register> createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+  late SharedPreferences sharedPreferences;
+  @override
+  void initState() {
+    initializeSharedPref();
+    super.initState();
+  }
+
+  void initializeSharedPref() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,20 +104,35 @@ class Register extends StatelessWidget {
                       children: [
                         Button(
                           onPressed: () {
-                            (emailController.text.isEmpty ||
-                                    passwordController.text.isEmpty)
-                                ? Fluttertoast.showToast(
-                                    msg: "All the fields are required",
-                                    backgroundColor: Colors.black,
-                                    textColor: Colors.white,
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    timeInSecForIosWeb: 1)
-                                : Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const Homepage(),
-                                    ));
+                            String token = authenticate(emailController,
+                                    passwordController, "register")
+                                .toString();
+
+                            if (token == "error") {
+                              Fluttertoast.showToast(
+                                  msg: "An error occured",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.black,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            } else if (token == "empty") {
+                              Fluttertoast.showToast(
+                                  msg: "Please fill all the fields",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.black,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                            } else {
+                              sharedPreferences.setString("token", token);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const Homepage()));
+                            }
                           },
                           text: "Register",
                           width: 100,
