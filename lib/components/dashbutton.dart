@@ -9,7 +9,7 @@ class DashboardButton extends StatelessWidget{
   Widget build(BuildContext context) {
     return Container(
                           height: 48,
-                          width: MediaQuery.of(context).size.width * 0.27,
+                          width: MediaQuery.of(context).size.width * 0.42,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                               color: colour,
