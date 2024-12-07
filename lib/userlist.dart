@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:drdo/components/background.dart';
 import 'package:drdo/components/mainheading.dart';
 import 'package:drdo/components/numbers.dart';
@@ -6,6 +8,8 @@ import 'package:drdo/components/sectionheading.dart';
 import 'package:drdo/components/sortnsearch.dart';
 import 'package:drdo/components/userdetail.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserList extends StatefulWidget {
   const UserList({super.key});
@@ -16,6 +20,45 @@ class UserList extends StatefulWidget {
 
 class _UserListState extends State<UserList> {
   String? selectedValue;
+  List data = [];
+  @override
+  void initState() {
+    getUserList();
+    super.initState();
+  }
+
+  void getUserList() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String? token = sharedPreferences.getString("token");
+
+    var response =
+        await http.get(Uri.parse("https://api.mlsc.tech/expert"), headers: {
+      "Content-Type": "application/json",
+      "ismobile": "true",
+      "authorization": "Bearer $token"
+    });
+
+    var jsonRes = await jsonDecode(response.body);
+
+    if (jsonRes["status"] == "success") {
+      print(jsonRes);
+      List userData = jsonRes["data"]["experts"];
+      List<Map<dynamic, dynamic>> userList = userData.map((exp) {
+        return {
+          "name": exp["name"],
+          "age": exp["dateOfBirth"] != null
+              ? DateTime.now().year - DateTime.parse(exp["dateOfBirth"]).year
+              : 0,
+          "work": exp["currentPosition"],
+        };
+      }).toList();
+
+      setState(() {
+        data = userList;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final TextEditingController controller = TextEditingController();
@@ -68,51 +111,20 @@ class _UserListState extends State<UserList> {
               const SizedBox(
                 height: 8,
               ),
-              const UserDetail(
-                  name: "Om Rajpal",
-                  age: "19",
-                  work: "Flutter Developer",
-                  percent: 0.76),
-              const SizedBox(
-                height: 6,
-              ),
-              const UserDetail(
-                  name: "Om Rajpal",
-                  age: "19",
-                  work: "Flutter Developer",
-                  percent: 0.76),
-              const SizedBox(
-                height: 6,
-              ),
-              const UserDetail(
-                  name: "Om Rajpal",
-                  age: "19",
-                  work: "Flutter Developer",
-                  percent: 0.76),
-              const SizedBox(
-                height: 6,
-              ),
-              const UserDetail(
-                  name: "Om Rajpal",
-                  age: "19",
-                  work: "Flutter Developer",
-                  percent: 0.76),
-              const SizedBox(
-                height: 6,
-              ),
-              const UserDetail(
-                  name: "Om Rajpal",
-                  age: "19",
-                  work: "Flutter Developer",
-                  percent: 0.76),
-              const SizedBox(
-                height: 6,
-              ),
-              const UserDetail(
-                  name: "Om Rajpal",
-                  age: "19",
-                  work: "Flutter Developer",
-                  percent: 0.76),
+              ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 6),
+                      child: UserDetail(
+                          name: data[index]["name"],
+                          age: data[index]["age"].toString(),
+                          work: data[index]["work"],
+                          percent: 0.76),
+                    );
+                  }),
             ],
           ),
         ),

@@ -107,9 +107,9 @@ class Homepage extends StatelessWidget {
                         children: [
                           DashboardButton(
                               colour: Color(0xffDE8F6E),
-                              text: "View all\nexperts"),
+                              text: "View all\nexperts", page: 'experts',),
                           DashboardButton(
-                              colour: Color(0xff9CAFB7), text: "View all\njobs"),
+                              colour: Color(0xff9CAFB7), text: "View all\njobs", page: 'jobs',),
                         ],
                       ),
                       const SizedBox(
@@ -120,10 +120,10 @@ class Homepage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           DashboardButton(
-                              colour: Color(0xff9CAFB7), text: "View your\nprofile"),
+                              colour: Color(0xff9CAFB7), text: "View your\nprofile", page: 'profile',),
                           DashboardButton(
                               colour: Color(0xff73A7A0),
-                              text: "View all\ncandidates"),
+                              text: "View all\ncandidates", page: 'candidates',),
                         ],
                       ),
                       const SizedBox(

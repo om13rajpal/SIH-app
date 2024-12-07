@@ -4,7 +4,7 @@ import 'package:drdo/components/input.dart';
 import 'package:drdo/components/loginsignup.dart';
 import 'package:drdo/components/text.dart';
 import 'package:drdo/functions/loginsignup.dart';
-import 'package:drdo/homepage.dart';
+import 'package:drdo/login.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:lottie/lottie.dart';
@@ -21,12 +21,7 @@ class _RegisterState extends State<Register> {
   late SharedPreferences sharedPreferences;
   @override
   void initState() {
-    initializeSharedPref();
     super.initState();
-  }
-
-  void initializeSharedPref() async {
-    sharedPreferences = await SharedPreferences.getInstance();
   }
 
   @override
@@ -103,10 +98,10 @@ class _RegisterState extends State<Register> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Button(
-                          onPressed: () {
-                            String token = authenticate(emailController,
-                                    passwordController, "register")
-                                .toString();
+                          onPressed: () async {
+                            String token = await authenticate(
+                                emailController, passwordController, "signup");
+                                print(token);
 
                             if (token == "error") {
                               Fluttertoast.showToast(
@@ -127,11 +122,11 @@ class _RegisterState extends State<Register> {
                                   textColor: Colors.white,
                                   fontSize: 16.0);
                             } else {
-                              sharedPreferences.setString("token", token);
+                              if (!context.mounted) return;
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const Homepage()));
+                                      builder: (context) => const Login()));
                             }
                           },
                           text: "Register",

@@ -7,17 +7,29 @@ Future<String> authenticate(TextEditingController email,
   if (email.text.isEmpty || password.text.isEmpty) {
     return "empty";
   } else {
-    var body = {"email": email.text.trim(), "password": password.text.trim()};
+    var body = (type == "signup")
+        ? {
+            "username": email.text.trim(),
+            "password": password.text.trim(),
+            "confirmPassword": password.text.trim()
+          }
+        : {"username": email.text.trim(), "password": password.text.trim()};
 
-    var response = await http.post(Uri.parse("http://localhost:3000/$type"),
+    var response = await http.post(
+        Uri.parse("https://api.mlsc.tech/admin/${type}"),
         headers: {"Content-Type": "application/json", "isMobile": "true"},
         body: jsonEncode(body));
 
     var jsonRes = jsonDecode(response.body);
+    print(jsonRes);
 
-    if (jsonRes["status"] == true) {
-      String token = jsonRes["token"];
-      return token;
+    if (jsonRes["status"] == "success") {
+      if (type == "signin") {
+        String token = jsonRes["data"]["userToken"];
+        return token;
+      } else {
+        return "success";
+      }
     } else {
       return "error";
     }

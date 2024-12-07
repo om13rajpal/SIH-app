@@ -104,8 +104,8 @@ class _LoginState extends State<Login> {
                       children: [
                         Button(
                           onPressed: () async {
-                            String token = await authenticate(emailController,
-                                    passwordController, "login");
+                            String token = await authenticate(
+                                emailController, passwordController, "signin");
                             if (token == "error") {
                               Fluttertoast.showToast(
                                   msg: "Invalid Credentials",
@@ -125,7 +125,9 @@ class _LoginState extends State<Login> {
                                   textColor: Colors.white,
                                   fontSize: 16.0);
                             } else {
-                              sharedPreferences.setString("token", token.toString());
+                              sharedPreferences.setString(
+                                  "token", token.toString());
+                              if (!context.mounted) return;
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

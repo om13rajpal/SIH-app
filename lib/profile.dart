@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:drdo/components/background.dart';
 import 'package:drdo/components/job.dart';
 import 'package:drdo/components/mainheading.dart';
@@ -7,9 +9,88 @@ import 'package:drdo/components/skillexp.dart';
 import 'package:drdo/components/text.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-class Profile extends StatelessWidget {
-  const Profile({super.key});
+class Profile extends StatefulWidget {
+  final String name;
+  const Profile({super.key, required this.name});
+
+  @override
+  State<Profile> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  late String name = "Om Rajpal";
+  late int age = 19;
+  late String pronouns = "He / Him";
+  late String experience = "Beginner";
+  late String industry = "1st Reconnaissance Squadron";
+
+  late List skills = [];
+  late double profileScore = 76;
+  late String currentPosition = "Product Designer";
+  late String bestInterviewer = "Flutter Developer";
+  late String keySkill = "Node.js Developer";
+  late String imgLink = "";
+
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
+  void getData() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? token = preferences.getString("token");
+    print(token);
+    var response = await http.get(
+        Uri.parse(
+            "https://api.mlsc.tech/expert/${widget.name}?education=true&experience=true"),
+        headers: {
+          "authorization": "Bearer $token",
+          "Content-Type": "application/json",
+          "ismobile": "true"
+        });
+
+    var jsonRes = await jsonDecode(response.body);
+    print(jsonRes);
+
+    if (jsonRes["status"] == "success") {
+      name = jsonRes["data"]["expert"]["name"];
+      age = jsonRes["data"]["expert"]["dateOfBirth"] != null
+          ? DateTime.now().year -
+              DateTime.parse(jsonRes["data"]["expert"]["dateOfBirth"]).year
+          : 0;
+      pronouns = jsonRes["data"]["expert"]["gender"];
+      currentPosition = jsonRes["data"]["expert"]["currentPosition"];
+      keySkill = jsonRes["data"]["expert"]["currentDepartment"];
+
+      // Process experience data
+      List experienceData = jsonRes["data"]["expert"]["experience"];
+      List<Map<String, dynamic>> experienceList = experienceData.map((exp) {
+        DateTime startDate = DateTime.parse(exp["startDate"]);
+        DateTime endDate = DateTime.parse(exp["endDate"]);
+        int yearsWorked = endDate.year - startDate.year;
+        if (endDate.month < startDate.month ||
+            (endDate.month == startDate.month && endDate.day < startDate.day)) {
+          yearsWorked -= 1;
+        }
+
+        return {
+          "skill": exp["department"],
+          "years": yearsWorked,
+        };
+      }).toList();
+
+      // Update state with experience list
+      setState(() {
+        skills = experienceList;
+      });
+    } else {
+      print("Error");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +143,7 @@ class Profile extends StatelessWidget {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Mainheading(text: "Om Rajpal"),
+                      Mainheading(text: name),
                       const SizedBox(
                         width: 5,
                       ),
@@ -74,8 +155,8 @@ class Profile extends StatelessWidget {
                             border: Border.all(color: Colors.black, width: 1),
                           ),
                           child: const Padding(
-                            padding:
-                                EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
                             child: TextData(
                                 text: 'Verified',
                                 fontSize: 8,
@@ -86,25 +167,25 @@ class Profile extends StatelessWidget {
                       )
                     ],
                   ),
-                  const Row(
+                  Row(
                     children: [
-                      ProfileDetails(data: "Unit", value: "1st Reconnaissance Squadron"),
-                      SizedBox(
+                      ProfileDetails(data: "Unit", value: industry),
+                      const SizedBox(
                         width: 10,
                       ),
-                      ProfileDetails(data: "Age", value: "19")
+                      ProfileDetails(data: "Age", value: age.toString())
                     ],
                   ),
                   const SizedBox(
                     height: 3,
                   ),
-                  const Row(
+                  Row(
                     children: [
-                      ProfileDetails(data: "Pronouns", value: "He / Him"),
-                      SizedBox(
+                      ProfileDetails(data: "Gender", value: pronouns),
+                      const SizedBox(
                         width: 10,
                       ),
-                     ProfileDetails(data: "Experience", value: "Beginner")
+                      ProfileDetails(data: "Experience", value: experience)
                     ],
                   ),
                   const SizedBox(
@@ -134,50 +215,48 @@ class Profile extends StatelessWidget {
                     height: 20,
                   ),
                   const Sectionheading(text: "Top Skills"),
-                  const Row(
+                  Row(
                     children: [
                       TextData(
-                          text: "Key skill",
+                          text: currentPosition,
                           fontSize: 11,
                           fontWeight: FontWeight.w500,
-                          color: Color(0xff7e7e7e)),
-                      SizedBox(
+                          color: const Color(0xff7e7e7e)),
+                      const SizedBox(
                         width: 3,
                       ),
-                      Icon(
+                      const Icon(
                         Icons.beach_access,
                         size: 8,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 3,
                       ),
                       TextData(
-                          text: "Node.js Developer",
+                          text: keySkill,
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xff3c3c3c))
+                          color: const Color(0xff3c3c3c))
                     ],
                   ),
                   const SizedBox(
                     height: 15,
                   ),
-                  const Experience(skill: "Docker", percentage: 0.42),
-                  const SizedBox(
-                    height: 6,
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: skills.length,
+
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: Experience(
+                          skill: skills[index]["skill"],
+                          percentage: skills[index]["years"],
+                        ),
+                      );
+                    },
                   ),
-                  const Experience(skill: "Node.js", percentage: 0.17),
-                  const SizedBox(
-                    height: 6,
-                  ),
-                  const Experience(skill: "Flutter", percentage: 0.65),
-                  const SizedBox(
-                    height: 6,
-                  ),
-                  const Experience(skill: "Next.js", percentage: 0.78),
-                  const SizedBox(
-                    height: 6,
-                  ),
-                  const Experience(skill: "Mongo", percentage: 1),
                   const SizedBox(
                     height: 25,
                   ),
@@ -234,7 +313,7 @@ class Profile extends StatelessWidget {
                         CircularPercentIndicator(
                           radius: 53,
                           lineWidth: 14,
-                          percent: 0.7,
+                          percent: profileScore / 100,
                           animateToInitialPercent: true,
                           animationDuration: 1000,
                           progressColor: const Color(0xffDE8F6E),
@@ -251,27 +330,27 @@ class Profile extends StatelessWidget {
                             thickness: 1,
                           ),
                         ),
-                        const Column(
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             TextData(
-                                text: "80 / 100",
+                                text: "$profileScore / 100",
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600,
                                 color: Color(0xff2C2C34)),
-                            SizedBox(
+                            const SizedBox(
                               height: 13,
                             ),
                             Column(
                               children: [
-                                TextData(
+                                const TextData(
                                     text: "Best interviewer for",
                                     fontSize: 10,
                                     fontWeight: FontWeight.w500,
                                     color: Color(0xff7E7E7E)),
                                 TextData(
-                                    text: "Flutter Developer",
+                                    text: bestInterviewer,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                     color: Color(0xff3C3C3C))

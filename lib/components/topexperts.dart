@@ -1,4 +1,5 @@
 import 'package:drdo/components/text.dart';
+import 'package:drdo/profile.dart';
 import 'package:flutter/material.dart';
 
 class TopExperts extends StatelessWidget{
@@ -9,49 +10,54 @@ class TopExperts extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      height: 22,
-                      width: 22,
-                      decoration: BoxDecoration(
-                          color: const Color(0xff838383),
-                          borderRadius: BorderRadius.circular(6)),
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.25,
-                          child: TextData(
-                              text: name,
-                              fontSize: 12.5,
-                              fontWeight: FontWeight.w600,
-                              color: const Color(0xff232323)),
-                        ),
+    return InkWell(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(name: name,)));
+      },
+      child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        height: 22,
+                        width: 22,
+                        decoration: BoxDecoration(
+                            color: const Color(0xff838383),
+                            borderRadius: BorderRadius.circular(6)),
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.25,
+                            child: TextData(
+                                text: name,
+                                fontSize: 12.5,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xff232323)),
+                          ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.32,
+                        child: TextData(text: job, fontSize: 10, fontWeight: FontWeight.w500, color: const Color(0xff979797))),
                         const SizedBox(
                           width: 10,
                         ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.32,
-                      child: TextData(text: job, fontSize: 10, fontWeight: FontWeight.w500, color: const Color(0xff979797))),
-                      const SizedBox(
-                        width: 10,
+                      SizedBox(
+                        width: 30,
+                        child: TextData(
+                            text: score,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xff232323)),
                       ),
-                    SizedBox(
-                      width: 30,
-                      child: TextData(
-                          text: score,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xff232323)),
-                    ),
-                      ],
-                    ),
-                    
-                  ],
-                );
+                        ],
+                      ),
+                      
+                    ],
+                  ),
+    );
   }
 
 }

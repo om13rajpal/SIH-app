@@ -4,7 +4,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class Experience extends StatelessWidget{
   final String skill;
-  final double percentage;
+  final int percentage;
   const Experience({super.key, required this.skill, required this.percentage});
 
   @override
@@ -27,7 +27,7 @@ class Experience extends StatelessWidget{
                           animation: true,
                           animationDuration: 1000,
                           progressColor: const Color(0xff3C3C3C),
-                          percent: percentage,
+                          percent: percentage.toDouble() / 5,
                           barRadius: const Radius.circular(10),
                           backgroundColor: const Color(0xFFA8A8A8),
                         ),
