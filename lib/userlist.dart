@@ -12,7 +12,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserList extends StatefulWidget {
-  const UserList({super.key});
+  final String pageType;
+  const UserList({super.key, required this.pageType});
 
   @override
   State<UserList> createState() => _UserListState();
@@ -31,8 +32,8 @@ class _UserListState extends State<UserList> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String? token = sharedPreferences.getString("token");
 
-    var response =
-        await http.get(Uri.parse("https://api.mlsc.tech/expert"), headers: {
+    var response = await http
+        .get(Uri.parse("https://api.mlsc.tech/${widget.pageType}"), headers: {
       "Content-Type": "application/json",
       "ismobile": "true",
       "authorization": "Bearer $token"
@@ -42,14 +43,16 @@ class _UserListState extends State<UserList> {
 
     if (jsonRes["status"] == "success") {
       print(jsonRes);
-      List userData = jsonRes["data"]["experts"];
+      List userData = jsonRes["data"]["${widget.pageType}s"];
       List<Map<dynamic, dynamic>> userList = userData.map((exp) {
         return {
           "name": exp["name"],
           "age": exp["dateOfBirth"] != null
               ? DateTime.now().year - DateTime.parse(exp["dateOfBirth"]).year
               : 0,
-          "work": exp["currentPosition"],
+          "work": widget.pageType == "expert" ? exp["currentPosition"] : exp["gender"],
+          "id":exp["_id"]
+
         };
       }).toList();
 
@@ -75,17 +78,23 @@ class _UserListState extends State<UserList> {
               const SizedBox(
                 height: 50,
               ),
-              const Mainheading(text: "Experts"),
+              Mainheading(
+                  text:
+                      (widget.pageType == "expert") ? "Experts" : "Candidates"),
               const SizedBox(
                 height: 20,
               ),
-              const Row(
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Numbers(label: "All Experts", value: "11.26 K"),
-                  Numbers(label: "Male", value: "518"),
-                  Numbers(label: "Female", value: "1009"),
+                  Numbers(
+                      label: (widget.pageType == "expert")
+                          ? "All Experts"
+                          : "All Candidates",
+                      value: "11.26 K"),
+                  const Numbers(label: "Male", value: "518"),
+                  const Numbers(label: "Female", value: "1009"),
                 ],
               ),
               const SizedBox(
@@ -107,7 +116,10 @@ class _UserListState extends State<UserList> {
               const SizedBox(
                 height: 15,
               ),
-              const Sectionheading(text: "All Candidates"),
+              Sectionheading(
+                  text: (widget.pageType == "expert")
+                      ? "Top Experts"
+                      : "Top Candidates"),
               const SizedBox(
                 height: 8,
               ),
@@ -122,6 +134,8 @@ class _UserListState extends State<UserList> {
                           name: data[index]["name"],
                           age: data[index]["age"].toString(),
                           work: data[index]["work"],
+                          id: data[index]["id"],
+                          type: widget.pageType,
                           percent: 0.76),
                     );
                   }),

@@ -1,5 +1,5 @@
+import 'package:drdo/form.dart';
 import 'package:drdo/joblist.dart';
-import 'package:drdo/profile.dart';
 import 'package:drdo/userlist.dart';
 import 'package:flutter/material.dart';
 
@@ -19,13 +19,13 @@ class DashboardButton extends StatelessWidget {
       onTap: () {
         if (page == "experts") {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const UserList()));
+              MaterialPageRoute(builder: (context) => const UserList(pageType: 'expert',)));
         } else if (page == "candidates") {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const UserList()));
+              MaterialPageRoute(builder: (context) => const UserList(pageType: 'candidate',)));
         } else if (page == "profile") {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => const Profile(name: 'Sneha Kapoor',)));
+              MaterialPageRoute(builder: (context) => const DataForm()));
         } else {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => const JobList()));

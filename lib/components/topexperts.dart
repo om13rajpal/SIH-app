@@ -12,7 +12,7 @@ class TopExperts extends StatelessWidget{
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Profile(name: name,)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const Profile(id: "675521ca5369beebdc1f58ef", type: '',)));
       },
       child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,

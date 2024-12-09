@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:drdo/components/background.dart';
 import 'package:drdo/components/job.dart';
@@ -8,13 +9,17 @@ import 'package:drdo/components/sectionheading.dart';
 import 'package:drdo/components/skillexp.dart';
 import 'package:drdo/components/text.dart';
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart';
+
 
 class Profile extends StatefulWidget {
-  final String name;
-  const Profile({super.key, required this.name});
+  final String id;
+  final String type;
+  const Profile({super.key, required this.id, required this.type});
 
   @override
   State<Profile> createState() => _ProfileState();
@@ -44,30 +49,41 @@ class _ProfileState extends State<Profile> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? token = preferences.getString("token");
     print(token);
-    var response = await http.get(
-        Uri.parse(
-            "https://api.mlsc.tech/expert/${widget.name}?education=true&experience=true"),
-        headers: {
-          "authorization": "Bearer $token",
-          "Content-Type": "application/json",
-          "ismobile": "true"
-        });
+    http.Response response;
+    if (widget.type == widget.type) {
+      response = await http.get(
+          Uri.parse(
+              "https://api.mlsc.tech/expert/${widget.id}?education=true&experience=true"),
+          headers: {
+            "authorization": "Bearer $token",
+            "Content-Type": "application/json",
+            "ismobile": "true"
+          });
+    } else {
+      response = await http.get(
+          Uri.parse("https://api.mlsc.tech/candidate/${widget.id}"),
+          headers: {
+            "authorization": "Bearer $token",
+            "Content-Type": "application/json",
+            "ismobile": "true"
+          });
+    }
 
     var jsonRes = await jsonDecode(response.body);
     print(jsonRes);
 
     if (jsonRes["status"] == "success") {
-      name = jsonRes["data"]["expert"]["name"];
-      age = jsonRes["data"]["expert"]["dateOfBirth"] != null
+      name = jsonRes["data"][widget.type]["name"];
+      age = jsonRes["data"][widget.type]["dateOfBirth"] != null
           ? DateTime.now().year -
-              DateTime.parse(jsonRes["data"]["expert"]["dateOfBirth"]).year
+              DateTime.parse(jsonRes["data"][widget.type]["dateOfBirth"]).year
           : 0;
-      pronouns = jsonRes["data"]["expert"]["gender"];
-      currentPosition = jsonRes["data"]["expert"]["currentPosition"];
-      keySkill = jsonRes["data"]["expert"]["currentDepartment"];
+      pronouns = jsonRes["data"][widget.type]["gender"];
+      currentPosition = jsonRes["data"][widget.type]["currentPosition"];
+      keySkill = jsonRes["data"][widget.type]["currentDepartment"];
 
       // Process experience data
-      List experienceData = jsonRes["data"]["expert"]["experience"];
+      List experienceData = jsonRes["data"][widget.type]["experience"];
       List<Map<String, dynamic>> experienceList = experienceData.map((exp) {
         DateTime startDate = DateTime.parse(exp["startDate"]);
         DateTime endDate = DateTime.parse(exp["endDate"]);
@@ -90,6 +106,47 @@ class _ProfileState extends State<Profile> {
     } else {
       print("Error");
     }
+  }
+
+  Future<void> uploadPDF() async{
+    try {
+    // Specify the path of the PDF stored in your local storage
+    final directory = await getApplicationDocumentsDirectory();
+    final filePath = "${directory.path}/example.pdf"; // Adjust file path
+    final file = File(filePath);
+
+    if (!file.existsSync()) {
+      print("File not found!");
+      return;
+    }
+
+    // Create a MultipartRequest
+    final uri = Uri.parse("https://api.mlsc.tech/parse");
+    final request = http.MultipartRequest('GET', uri);
+
+    // Add the file as a form field
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'file', // Field name for form-data
+        file.path,
+        contentType: MediaType('application', 'pdf'),
+      ),
+    );
+
+    // Optionally add other form data
+    request.fields['name'] = 'example.pdf';
+
+    // Send the request
+    final response = await request.send();
+
+    if (response.statusCode == 200) {
+      print("File uploaded successfully!");
+    } else {
+      print("Failed to upload file. Status code: ${response.statusCode}");
+    }
+  } catch (e) {
+    print("Error uploading file: $e");
+  }
   }
 
   @override
@@ -246,7 +303,6 @@ class _ProfileState extends State<Profile> {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: skills.length,
-
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 6),
@@ -264,15 +320,30 @@ class _ProfileState extends State<Profile> {
                   const SizedBox(
                     height: 8,
                   ),
-                  const Job(jobTitle: "Node.js Developer"),
+                  const Job(
+                    jobTitle: "Node.js Developer",
+                    daysLeft: 2,
+                    applicants: 101,
+                    id: '',
+                  ),
                   const SizedBox(
                     height: 5,
                   ),
-                  const Job(jobTitle: "Node.js Developer"),
+                  const Job(
+                    jobTitle: "Node.js Developer",
+                    daysLeft: 2,
+                    applicants: 101,
+                    id: '',
+                  ),
                   const SizedBox(
                     height: 5,
                   ),
-                  const Job(jobTitle: "Node.js Developer"),
+                  const Job(
+                    jobTitle: "Node.js Developer",
+                    daysLeft: 2,
+                    applicants: 101,
+                    id: '',
+                  ),
                   const SizedBox(
                     height: 5,
                   ),
@@ -338,7 +409,7 @@ class _ProfileState extends State<Profile> {
                                 text: "$profileScore / 100",
                                 fontSize: 20,
                                 fontWeight: FontWeight.w600,
-                                color: Color(0xff2C2C34)),
+                                color: const Color(0xff2C2C34)),
                             const SizedBox(
                               height: 13,
                             ),
@@ -353,7 +424,7 @@ class _ProfileState extends State<Profile> {
                                     text: bestInterviewer,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
-                                    color: Color(0xff3C3C3C))
+                                    color: const Color(0xff3C3C3C))
                               ],
                             )
                           ],

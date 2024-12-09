@@ -101,7 +101,7 @@ class _RegisterState extends State<Register> {
                           onPressed: () async {
                             String token = await authenticate(
                                 emailController, passwordController, "signup");
-                                print(token);
+                            print(token);
 
                             if (token == "error") {
                               Fluttertoast.showToast(
@@ -122,6 +122,14 @@ class _RegisterState extends State<Register> {
                                   textColor: Colors.white,
                                   fontSize: 16.0);
                             } else {
+                              Fluttertoast.showToast(
+                                  msg: "Successfully Registered",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.black,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
                               if (!context.mounted) return;
                               Navigator.push(
                                   context,

@@ -120,7 +120,7 @@ class Homepage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           DashboardButton(
-                              colour: Color(0xff9CAFB7), text: "View your\nprofile", page: 'profile',),
+                              colour: Color(0xff9CAFB7), text: "Add an\nExpert", page: 'profile',),
                           DashboardButton(
                               colour: Color(0xff73A7A0),
                               text: "View all\ncandidates", page: 'candidates',),
@@ -136,11 +136,11 @@ class Homepage extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Job(jobTitle: "Node.js Developer"),
+                          const Job(jobTitle: "Node.js Developer", daysLeft: 2, applicants: 101, id: '',),
                           const SizedBox(
                             height: 7,
                           ),
-                          const Job(jobTitle: "Flutter Developer"),
+                          const Job(jobTitle: "Flutter Developer", daysLeft: 2, applicants: 101, id: '',),
                           const SizedBox(
                             height: 10,
                           ),

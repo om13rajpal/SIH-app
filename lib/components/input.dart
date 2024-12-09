@@ -2,7 +2,7 @@ import 'package:drdo/components/text.dart';
 import 'package:flutter/material.dart';
 
 class Input extends StatelessWidget {
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String hintText;
   final bool obscureText;
   final String labelText;

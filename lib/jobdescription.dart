@@ -1,11 +1,42 @@
+import 'dart:convert';
 import 'package:drdo/components/background.dart';
 import 'package:drdo/components/keyskills.dart';
 import 'package:drdo/components/sectionheading.dart';
 import 'package:drdo/components/text.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-class JobDescription extends StatelessWidget {
-  const JobDescription({super.key});
+class JobDescription extends StatefulWidget {
+  final String id;
+  const JobDescription({super.key, required this.id});
+
+  @override
+  State<JobDescription> createState() => _JobDescriptionState();
+}
+
+class _JobDescriptionState extends State<JobDescription> {
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
+  void getData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String? token = sharedPreferences.getString("token");
+    var response = await http.get(
+        Uri.parse(
+            "https://api.mlsc.tech/subject/${widget.id}/?applications=true&candidates=true&experts=true&feedbacks=true"),
+        headers: {
+          "authorization": "Bearer $token",
+          "ismobile": "true",
+          "Content-Type": "application/json"
+        });
+
+    var jsonRes = await jsonDecode(response.body);
+    print(jsonRes);
+  }
 
   @override
   Widget build(BuildContext context) {

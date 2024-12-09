@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:drdo/components/background.dart';
 import 'package:drdo/components/job.dart';
 import 'package:drdo/components/mainheading.dart';
@@ -6,10 +8,56 @@ import 'package:drdo/components/searchbar.dart';
 import 'package:drdo/components/sectionheading.dart';
 import 'package:drdo/components/sortnsearch.dart';
 import 'package:drdo/components/text.dart';
+import 'package:drdo/jobform.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-class JobList extends StatelessWidget {
+class JobList extends StatefulWidget {
   const JobList({super.key});
+
+  @override
+  State<JobList> createState() => _JobListState();
+}
+
+class _JobListState extends State<JobList> {
+  List data = [];
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
+  void getData() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String? token = sharedPreferences.getString("token");
+    var response =
+        await http.get(Uri.parse("https://api.mlsc.tech/subject"), headers: {
+      "authorization": "Bearer $token",
+      "Content-Type": "application/json",
+      "ismobile": "true"
+    });
+
+    var jsonRes = await jsonDecode(response.body);
+
+    if (jsonRes["status"] == "success") {
+      List jobData = jsonRes["data"]["subjects"];
+      List<Map<String, dynamic>> jobList = jobData.map((subject) {
+        return {
+          "title": subject["title"],
+          "number": 10,
+          "daysLeft": DateTime.parse(subject["createdAt"])
+              .difference(DateTime.now())
+              .inDays,
+          "id": subject["_id"]
+        };
+      }).toList();
+
+      setState(() {
+        data = jobList;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +95,21 @@ class JobList extends StatelessWidget {
                   const SizedBox(
                     height: 8,
                   ),
-                  const Job(jobTitle: "Node.js Developer"),
+                  const Job(
+                    jobTitle: "Node.js Developer",
+                    applicants: 101,
+                    daysLeft: 2,
+                    id: '',
+                  ),
                   const SizedBox(
                     height: 8,
                   ),
-                  const Job(jobTitle: "Node.js Developer"),
+                  const Job(
+                    jobTitle: "Node.js Developer",
+                    daysLeft: 2,
+                    applicants: 100,
+                    id: '',
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
@@ -113,7 +171,13 @@ class JobList extends StatelessWidget {
                         height: 35,
                         width: 80,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => JobForm(),
+                                ));
+                          },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.black,
                               padding: const EdgeInsets.symmetric(vertical: 10),
@@ -134,10 +198,7 @@ class JobList extends StatelessWidget {
                   const SizedBox(
                     height: 30,
                   ),
-                  SizedBox(
-                    height: 32,
-                    child: Search(controller: controller)
-                  ),
+                  SizedBox(height: 32, child: Search(controller: controller)),
                   const SizedBox(
                     height: 8,
                   ),
@@ -149,18 +210,34 @@ class JobList extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  const Job(jobTitle: "Node.js Developer"),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  const Job(jobTitle: "Node.js Developer"),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  const Job(jobTitle: "Node.js Developer"),
-                  const SizedBox(
-                    height: 30,
-                  ),
+                  ListView.builder(
+                    itemCount: data.length,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Job(
+                          jobTitle: data[index]["title"],
+                          applicants: data[index]["number"],
+                          daysLeft: data[index]["daysLeft"],
+                          id: data[index]["id"],
+                        ),
+                      );
+                    },
+                  )
+                  // const Job(jobTitle: "Node.js Developer"),
+                  // const SizedBox(
+                  //   height: 8,
+                  // ),
+                  // const Job(jobTitle: "Node.js Developer"),
+                  // const SizedBox(
+                  //   height: 8,
+                  // ),
+                  // const Job(jobTitle: "Node.js Developer"),
+                  // const SizedBox(
+                  //   height: 30,
+                  // ),
                 ],
               ),
             ),

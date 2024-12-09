@@ -40,6 +40,10 @@ dependencies:
   fluttertoast: ^8.2.8
   percent_indicator: ^4.2.4
   jwt_decoder: ^2.0.1
+  intl: ^0.20.1
+  file_picker: ^8.1.4
+  path_provider: ^2.1.5
+  http_parser: ^4.0.2
 
 dev_dependencies:
   flutter_test:
