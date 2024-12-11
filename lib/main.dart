@@ -1,5 +1,6 @@
 import 'package:drdo/homepage.dart';
 import 'package:drdo/login.dart';
+import 'package:drdo/panel.dart';
 import 'package:flutter/material.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,7 +50,7 @@ class _DrdoState extends State<Drdo> {
       theme: ThemeData(
           primaryColor: Colors.black,
           visualDensity: VisualDensity.adaptivePlatformDensity),
-      home: (isLoggedIn) ? const Homepage() : const Login(),
+      home: (isLoggedIn) ? const Panel() : const Panel(),
     );
   }
 }

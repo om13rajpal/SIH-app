@@ -27,7 +27,7 @@ class _JobDescriptionState extends State<JobDescription> {
     String? token = sharedPreferences.getString("token");
     var response = await http.get(
         Uri.parse(
-            "https://api.mlsc.tech/subject/${widget.id}/?applications=true&candidates=true&experts=true&feedbacks=true"),
+            "https://api.black-swan.tech/subject/${widget.id}/?applications=true&candidates=true&experts=true&feedbacks=true"),
         headers: {
           "authorization": "Bearer $token",
           "ismobile": "true",

@@ -53,7 +53,7 @@ class _ProfileState extends State<Profile> {
     if (widget.type == widget.type) {
       response = await http.get(
           Uri.parse(
-              "https://api.mlsc.tech/expert/${widget.id}?education=true&experience=true"),
+              "https://api.black-swan.tech/expert/${widget.id}?education=true&experience=true"),
           headers: {
             "authorization": "Bearer $token",
             "Content-Type": "application/json",
@@ -61,7 +61,7 @@ class _ProfileState extends State<Profile> {
           });
     } else {
       response = await http.get(
-          Uri.parse("https://api.mlsc.tech/candidate/${widget.id}"),
+          Uri.parse("https://api.black-swan.tech/candidate/${widget.id}"),
           headers: {
             "authorization": "Bearer $token",
             "Content-Type": "application/json",
@@ -121,7 +121,7 @@ class _ProfileState extends State<Profile> {
     }
 
     // Create a MultipartRequest
-    final uri = Uri.parse("https://api.mlsc.tech/parse");
+    final uri = Uri.parse("https://api.black-swan.tech/parse");
     final request = http.MultipartRequest('GET', uri);
 
     // Add the file as a form field

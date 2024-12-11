@@ -32,7 +32,7 @@ class _JobListState extends State<JobList> {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String? token = sharedPreferences.getString("token");
     var response =
-        await http.get(Uri.parse("https://api.mlsc.tech/subject"), headers: {
+        await http.get(Uri.parse("https://api.black-swan.tech/subject"), headers: {
       "authorization": "Bearer $token",
       "Content-Type": "application/json",
       "ismobile": "true"

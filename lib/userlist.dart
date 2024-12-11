@@ -33,7 +33,7 @@ class _UserListState extends State<UserList> {
     String? token = sharedPreferences.getString("token");
 
     var response = await http
-        .get(Uri.parse("https://api.mlsc.tech/${widget.pageType}"), headers: {
+        .get(Uri.parse("https://api.black-swan.tech/${widget.pageType}"), headers: {
       "Content-Type": "application/json",
       "ismobile": "true",
       "authorization": "Bearer $token"

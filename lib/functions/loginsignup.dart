@@ -16,7 +16,7 @@ Future<String> authenticate(TextEditingController email,
         : {"username": email.text.trim(), "password": password.text.trim()};
 
     var response = await http.post(
-        Uri.parse("https://api.mlsc.tech/admin/$type"),
+        Uri.parse("https://api.black-swan.tech/admin/$type"),
         headers: {"Content-Type": "application/json", "isMobile": "true"},
         body: jsonEncode(body));
 
