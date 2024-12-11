@@ -1,4 +1,5 @@
 import 'package:drdo/homepage.dart';
+import 'package:drdo/jobapplications.dart';
 import 'package:drdo/login.dart';
 import 'package:drdo/panel.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class _DrdoState extends State<Drdo> {
       theme: ThemeData(
           primaryColor: Colors.black,
           visualDensity: VisualDensity.adaptivePlatformDensity),
-      home: (isLoggedIn) ? const Panel() : const Panel(),
+      home: (isLoggedIn) ? const JobApplications() : const JobApplications(),
     );
   }
 }
